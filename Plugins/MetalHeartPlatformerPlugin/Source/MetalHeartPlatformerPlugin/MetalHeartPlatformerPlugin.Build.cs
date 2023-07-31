@@ -29,23 +29,23 @@ public class MetalHeartPlatformerPlugin : ModuleRules
                 "Projects",
                 "CoreUObject",
                 "Engine",
+                "MetalHeartPlatformerPluginLibrary",
+				"Protobuf",
             }
 			);
-			
-		
-		PrivateDependencyModuleNames.AddRange(
+
+        PrivateDependencyModuleNames.AddRange(
 			new string[]
             {
-                "MetalHeartPlatformerPluginLibrary",
+               
             }
 			);
-		
-		
-		DynamicallyLoadedModuleNames.AddRange(
+
+        DynamicallyLoadedModuleNames.AddRange(
 			new string[]
 			{
 				// ... add any modules that your module loads dynamically here ...
 			}
 			);
-	}
+    }
 }

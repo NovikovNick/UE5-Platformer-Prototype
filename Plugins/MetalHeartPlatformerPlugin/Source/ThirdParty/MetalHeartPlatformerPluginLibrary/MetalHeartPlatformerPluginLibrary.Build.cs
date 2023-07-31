@@ -32,8 +32,7 @@ public class MetalHeartPlatformerPluginLibrary : ModuleRules
                 IncludeDir
             }
             );
-
-            PublicIncludePaths.Add(IncludeDir);
+            //PublicIncludePaths.Add(IncludeDir);
             PublicAdditionalLibraries.Add(LibPath);
             RuntimeDependencies.Add(DllPath);
         }

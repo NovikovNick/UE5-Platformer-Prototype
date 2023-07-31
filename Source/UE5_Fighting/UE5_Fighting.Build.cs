@@ -13,7 +13,8 @@ public class UE5_Fighting : ModuleRules
             "CoreUObject",
             "Engine",
             "InputCore",
-            "MetalHeartPlatformerPlugin"
+            "MetalHeartPlatformerPlugin",
+            "Protobuf",
         });
 
         PublicIncludePaths.AddRange(new string[] {
