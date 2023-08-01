@@ -37,7 +37,10 @@ void AFNGBaseCharacter::Tick(float DeltaTime)
   {
     const auto X = GS->PlatformerGameState.Player.Parameters.Position.X;
     const auto Y = GS->PlatformerGameState.Player.Parameters.Position.Y;
-    FVector Position{X, 0.0, Y};
+    const auto Width = GS->PlatformerGameState.Player.Parameters.Width;
+    const auto Height = GS->PlatformerGameState.Player.Parameters.Height;
+
+    FVector Position{X + Width / 2, 0.0, Y + Height / 2};
     SetActorLocation(Position);
 
     VelocityX = GS->PlatformerGameState.Player.Parameters.Velocity.X;

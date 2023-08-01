@@ -70,3 +70,19 @@ struct FPlatformerGameState
 
   FPlatformerPlayer Player, Enemy;
 };
+
+USTRUCT(BlueprintType)
+struct FPlatformData
+{
+  GENERATED_USTRUCT_BODY()
+
+public:
+  UPROPERTY(EditAnywhere, Category = "General")
+  int32 X;
+  UPROPERTY(EditAnywhere, Category = "General")
+  int32 Y;
+  UPROPERTY(EditAnywhere, Category = "General")
+  int32 Width;
+  UPROPERTY(EditAnywhere, Category = "General")
+  int32 Height;
+};

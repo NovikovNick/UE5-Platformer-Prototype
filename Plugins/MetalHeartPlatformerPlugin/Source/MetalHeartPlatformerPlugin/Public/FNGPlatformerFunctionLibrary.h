@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "MetalHeartPlatformerTypes.h"
-#include "types.h"
 #include "FNGPlatformerFunctionLibrary.generated.h"
 
 UCLASS()
@@ -19,7 +18,7 @@ public:
   static void EvalInit();
 
   UFUNCTION(BlueprintCallable, Category = "Platformer Library")
-  static void EvalSetLocation();
+  static void EvalSetLocation(TArray<FPlatformData>& PlatformData);
 
   UFUNCTION(BlueprintCallable, Category = "Platformer Library")
   static void EvalGetPublicEndpoint(int local_port);

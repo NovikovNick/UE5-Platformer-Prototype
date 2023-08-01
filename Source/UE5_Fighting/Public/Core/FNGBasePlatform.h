@@ -17,9 +17,10 @@ public:
   // Sets default values for this actor's properties
   AFNGBasePlatform();
 
-protected:
   UPROPERTY(VisibleAnywhere)
   UStaticMeshComponent* BaseMesh;
+
+protected:
 
   // Called when the game starts or when spawned
   virtual void BeginPlay() override;

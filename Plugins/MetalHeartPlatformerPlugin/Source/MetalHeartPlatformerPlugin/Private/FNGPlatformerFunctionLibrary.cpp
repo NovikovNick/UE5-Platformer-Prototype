@@ -1,15 +1,12 @@
 // Generic Fighting Game
 
 #include "FNGPlatformerFunctionLibrary.h"
+#include "MetalHeartPlatformerTypes.h"
 #include "api.h"
 #include "schema.pb.h"
 
 EPlatformerPlayerState Convert(ser::PlayerState state);
 
-std::vector<Platform> platforms{{0, 0, 1864, 32, {0, 608}},
-                                {1, 0, 224, 32, {672, 736}},
-                                {2, 0, 32, 256, {0, 640}},
-                                {3, 0, 32, 256, {1864, 640}}};
 uint8_t game_state_buf[512];
 int length = 0;
 
@@ -18,9 +15,19 @@ void UFNGPlatformerFunctionLibrary::EvalInit()
   Init({60, Endpoint{}});
 }
 
-void UFNGPlatformerFunctionLibrary::EvalSetLocation()
+void UFNGPlatformerFunctionLibrary::EvalSetLocation(TArray<FPlatformData>& PlatformData)
 {
-  Location location{true, {192, 704}, {96, 704}, platforms.data(), platforms.size()};
+  TArray<Platform> Platforms;
+  for (int id = 0; id < PlatformData.Num(); ++id)
+  {
+    Platforms.Add({id,
+                   0,
+                   PlatformData[id].Width,
+                   PlatformData[id].Height,
+                   {PlatformData[id].X, PlatformData[id].Y}});
+  };
+
+  Location location{true, {192, 704}, {96, 704}, Platforms.GetData(), Platforms.Num()};
   SetLocation(location);
 }
 
@@ -65,6 +72,9 @@ FPlatformerGameState UFNGPlatformerFunctionLibrary::EvalGetState(
   res.Player.Parameters.Velocity.X = dst.players()[0].obj().velocity().x();
   res.Player.Parameters.Velocity.Y = dst.players()[0].obj().velocity().y();
 
+  res.Player.Parameters.Width = dst.players()[0].obj().width();
+  res.Player.Parameters.Height = dst.players()[0].obj().height();
+
   res.Player.State = Convert(dst.players()[0].state());
   res.Player.StateFrame = dst.players()[0].state_frame();
   return res;
@@ -85,7 +95,8 @@ EPlatformerPlayerState Convert(ser::PlayerState state)
   {
     case ser::PlayerState::LOW_ATTACK: return EPlatformerPlayerState::LOW_ATTACK;
     case ser::PlayerState::MID_ATTACK: return EPlatformerPlayerState::MID_ATTACK;
-    case ser::PlayerState::OVERHEAD_ATTACK: return EPlatformerPlayerState::OVERHEAD_ATTACK;
+    case ser::PlayerState::OVERHEAD_ATTACK:
+      return EPlatformerPlayerState::OVERHEAD_ATTACK;
     default: return EPlatformerPlayerState::DEATH;
   }
 }

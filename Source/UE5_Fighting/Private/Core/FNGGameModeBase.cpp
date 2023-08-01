@@ -5,6 +5,7 @@
 #include "Core/FNGPlayerController.h"
 #include "Core/FNGGameState.h"
 #include "FNGPlatformerFunctionLibrary.h"
+#include "MetalHeartPlatformerTypes.h"
 
 FPlatformerGameBuffer Buffer;
 
@@ -24,22 +25,26 @@ void AFNGGameModeBase::StartPlay()
   if (!GetWorld()) return;
 
   auto World = GetWorld();
-  auto Transform = FTransform{FRotator::ZeroRotator, FVector::Zero()};
-  auto Spawned = World->SpawnActorDeferred<AFNGBasePlatform>(PlatformClass, Transform);
 
-  if (Spawned)
+  for (const auto Platform : PlatformData)
   {
-    Spawned->FinishSpawning(Transform);
-  }
-  /*
-  {2, 0, 32, 256, {0, 640}}
-  {3, 0, 32, 256, {1864, 640}}
-  */
-  /*PlatformData.Add({0, 0, 1864, 32, {0, 608}});
-  PlatformData.Add({1, 0, 224, 32, {672, 736}});
-  auto Platform = PlatformData.GetData();*/
+    auto Transform =
+        FTransform{FRotator::ZeroRotator,
+                   FVector{static_cast<float>(Platform.X + Platform.Width / 2),
+                           0,
+                           static_cast<float>(Platform.Y + Platform.Height / 2)},
+                   FVector{static_cast<float>(Platform.Width),  //
+                           200,                                 //
+                           static_cast<float>(Platform.Height)}};
 
-  UFNGPlatformerFunctionLibrary::EvalSetLocation();
+    auto Spawned = World->SpawnActorDeferred<AFNGBasePlatform>(PlatformClass, Transform);
+    if (Spawned)
+    {
+      Spawned->FinishSpawning(Transform);
+    }
+  };
+
+  UFNGPlatformerFunctionLibrary::EvalSetLocation(PlatformData);
   UFNGPlatformerFunctionLibrary::EvalInit();
   UFNGPlatformerFunctionLibrary::EvalStartGame();
 }
