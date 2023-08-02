@@ -105,6 +105,8 @@ void Fill(const ser::Player& Src, FPlatformerPlayer& Dst)
 
   Dst.Parameters.Width = Src.obj().width();
   Dst.Parameters.Height = Src.obj().height();
+  
+  Dst.IsLeftDirection = Src.left_direction();
 
   Dst.State = Convert(Src.state());
   Dst.StateFrame = Src.state_frame();

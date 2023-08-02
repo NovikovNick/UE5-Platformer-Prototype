@@ -59,7 +59,7 @@ struct FPlatformerPlayer
 
   EPlatformerPlayerState State;
   int32 StateFrame;
-
+  bool IsLeftDirection;
   EPlatformerPlayerAttackPhase AttackPhase;
 };
 

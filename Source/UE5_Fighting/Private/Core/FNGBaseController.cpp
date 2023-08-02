@@ -15,7 +15,9 @@ void AFNGBaseController::UpdateCharacterPosition(const FPlatformerPlayer& Char)
 
   auto FNGPlayer = Cast<AFNGBaseCharacter>(GetPawn());
   FNGPlayer->MoveTo(X + Width / 2, Y + Height / 2);
-  FNGPlayer->SetVelocityX(Char.Parameters.Velocity.X);
+  FNGPlayer->SetVelocityX((Char.IsLeftDirection ? -1 : 1) * Char.Parameters.Velocity.X);
+
+  FNGPlayer->SetActorRotation(FRotator{0.0f, Char.IsLeftDirection ? 90.0f : -90.0f, 0.0f});
 
   switch (Char.State)
   {
