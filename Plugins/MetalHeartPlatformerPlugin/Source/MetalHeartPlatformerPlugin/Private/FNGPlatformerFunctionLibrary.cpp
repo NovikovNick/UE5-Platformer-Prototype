@@ -6,6 +6,7 @@
 #include "schema.pb.h"
 
 EPlatformerPlayerState Convert(ser::PlayerState state);
+void Fill(const ser::Player& Src, FPlatformerPlayer& Dst);
 
 uint8_t game_state_buf[512];
 int length = 0;
@@ -62,22 +63,13 @@ FPlatformerGameState UFNGPlatformerFunctionLibrary::EvalGetState(
 {
   GetState(Buffer.Buffer, &Buffer.BufferLength);
 
-  ser::GameState dst;
-  dst.ParseFromArray(Buffer.Buffer, Buffer.BufferLength);
-
-  FPlatformerGameState res;
-  res.Player.Parameters.Position.X = dst.players()[0].obj().position().x();
-  res.Player.Parameters.Position.Y = dst.players()[0].obj().position().y();
-
-  res.Player.Parameters.Velocity.X = dst.players()[0].obj().velocity().x();
-  res.Player.Parameters.Velocity.Y = dst.players()[0].obj().velocity().y();
-
-  res.Player.Parameters.Width = dst.players()[0].obj().width();
-  res.Player.Parameters.Height = dst.players()[0].obj().height();
-
-  res.Player.State = Convert(dst.players()[0].state());
-  res.Player.StateFrame = dst.players()[0].state_frame();
-  return res;
+  ser::GameState DeserializedGameState;
+  DeserializedGameState.ParseFromArray(Buffer.Buffer, Buffer.BufferLength);
+  
+  FPlatformerGameState Res;
+  Fill(DeserializedGameState.players()[0], Res.Player);
+  Fill(DeserializedGameState.players()[1], Res.Enemy);
+  return Res;
 }
 
 int32 UFNGPlatformerFunctionLibrary::EvalGetMicrosecondsInOneTick()
@@ -89,6 +81,8 @@ void UFNGPlatformerFunctionLibrary::EvalGetStatus() {}
 
 void UFNGPlatformerFunctionLibrary::EvalGetErrorCode() {}
 
+/** CONVENIENCE **/
+
 EPlatformerPlayerState Convert(ser::PlayerState state)
 {
   switch (state)
@@ -99,4 +93,19 @@ EPlatformerPlayerState Convert(ser::PlayerState state)
       return EPlatformerPlayerState::OVERHEAD_ATTACK;
     default: return EPlatformerPlayerState::DEATH;
   }
+}
+
+void Fill(const ser::Player& Src, FPlatformerPlayer& Dst)
+{
+  Dst.Parameters.Position.X = Src.obj().position().x();
+  Dst.Parameters.Position.Y = Src.obj().position().y();
+
+  Dst.Parameters.Velocity.X = Src.obj().velocity().x();
+  Dst.Parameters.Velocity.Y = Src.obj().velocity().y();
+
+  Dst.Parameters.Width = Src.obj().width();
+  Dst.Parameters.Height = Src.obj().height();
+
+  Dst.State = Convert(Src.state());
+  Dst.StateFrame = Src.state_frame();
 }

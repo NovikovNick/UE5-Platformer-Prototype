@@ -4,6 +4,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Core/FNGGameState.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 AFNGBaseCharacter::AFNGBaseCharacter()
 {
@@ -16,6 +17,8 @@ AFNGBaseCharacter::AFNGBaseCharacter()
 
   CameraComp = CreateDefaultSubobject<UCameraComponent>("CameraComp");
   CameraComp->SetupAttachment(SpringArmComp);
+
+  GetCharacterMovement()->GravityScale = 0.0f;
 }
 
 // Called when the game starts or when spawned
@@ -28,36 +31,16 @@ void AFNGBaseCharacter::BeginPlay()
 void AFNGBaseCharacter::Tick(float DeltaTime)
 {
   Super::Tick(DeltaTime);
-
-  const auto GS = GetWorld()  //
-                      ? Cast<AFNGGameState>(GetWorld()->GetGameState())
-                      : nullptr;
-
-  if (GS)
-  {
-    const auto X = GS->PlatformerGameState.Player.Parameters.Position.X;
-    const auto Y = GS->PlatformerGameState.Player.Parameters.Position.Y;
-    const auto Width = GS->PlatformerGameState.Player.Parameters.Width;
-    const auto Height = GS->PlatformerGameState.Player.Parameters.Height;
-
-    FVector Position{X + Width / 2, 0.0, Y + Height / 2};
-    SetActorLocation(Position);
-
-    VelocityX = GS->PlatformerGameState.Player.Parameters.Velocity.X;
-
-    switch (GS->PlatformerGameState.Player.State)
-    {
-      case EPlatformerPlayerState::LOW_ATTACK: LowAttack(); break;
-      case EPlatformerPlayerState::MID_ATTACK: MidAttack(); break;
-      case EPlatformerPlayerState::OVERHEAD_ATTACK: HighAttack(); break;
-    }
-  }
 }
 
 // Called to bind functionality to input
 void AFNGBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
   Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
+
+void AFNGBaseCharacter::MoveTo(float X, float Y) {
+  SetActorLocation({X, 0.0f, Y});
 }
 
 void AFNGBaseCharacter::LowAttack()

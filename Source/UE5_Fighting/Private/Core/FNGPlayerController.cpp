@@ -2,17 +2,13 @@
 
 #include "Core/FNGPlayerController.h"
 #include "Core/FNGBaseCharacter.h"
+#include "Core/FNGGameState.h"
 #include "FNGPlatformerFunctionLibrary.h"
 #include "Animation/AnimMontage.h"
 
 void AFNGPlayerController::Tick(float DeltaSeconds)
 {
-  UFNGPlatformerFunctionLibrary::EvalUpdate(bWantsMoveLeft,
-                                            bWantsMoveRight,
-                                            bWantsJump,
-                                            bWantsCrouch,
-                                            bWantsAttack,
-                                            bWantsBlock);
+  if (GetGameState()) UpdateCharacterPosition(GetGameState()->PlatformerGameState.Player);
 }
 
 void AFNGPlayerController::SetupInputComponent()
@@ -73,26 +69,34 @@ void AFNGPlayerController::SetupInputComponent()
 
 void AFNGPlayerController::Move(float Amount)
 {
-  bWantsMoveLeft = Amount < 0;
-  bWantsMoveRight = Amount > 0;
+  auto GS = GetGameState();
+  if (GS)
+  {
+    GS->Input.bWantsMoveRight = Amount > 0;
+    GS->Input.bWantsMoveLeft = Amount < 0;
+  }
 }
 
 void AFNGPlayerController::Attack(bool Enable)
 {
-  bWantsAttack = Enable;
+  auto GS = GetGameState();
+  if (GS) GS->Input.bWantsAttack = Enable;
 }
 
 void AFNGPlayerController::Block(bool Enable)
 {
-  bWantsBlock = Enable;
+  auto GS = GetGameState();
+  if (GS) GS->Input.bWantsBlock = Enable;
 }
 
 void AFNGPlayerController::Jump(bool Enable)
 {
-  bWantsJump = Enable;
+  auto GS = GetGameState();
+  if (GS) GS->Input.bWantsJump = Enable;
 }
 
 void AFNGPlayerController::Crouch(bool Enable)
 {
-  bWantsCrouch = Enable;
+  auto GS = GetGameState();
+  if (GS) GS->Input.bWantsCrouch = Enable;
 }

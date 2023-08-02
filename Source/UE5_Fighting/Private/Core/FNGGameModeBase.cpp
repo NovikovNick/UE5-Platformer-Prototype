@@ -3,6 +3,7 @@
 #include "Core/FNGGameModeBase.h"
 #include "Core/FNGBaseCharacter.h"
 #include "Core/FNGPlayerController.h"
+#include "Core/FNGEnemyController.h"
 #include "Core/FNGGameState.h"
 #include "FNGPlatformerFunctionLibrary.h"
 #include "MetalHeartPlatformerTypes.h"
@@ -22,10 +23,11 @@ AFNGGameModeBase::AFNGGameModeBase()
 void AFNGGameModeBase::StartPlay()
 {
   Super::StartPlay();
-  if (!GetWorld()) return;
 
+  if (!GetWorld()) return;
   auto World = GetWorld();
 
+  // Spawn platforms
   for (const auto Platform : PlatformData)
   {
     auto Transform =
@@ -44,6 +46,14 @@ void AFNGGameModeBase::StartPlay()
     }
   };
 
+  {  // Spawn other players
+    FActorSpawnParameters SpawnInfo;
+    SpawnInfo.SpawnCollisionHandlingOverride =
+        ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+    RestartPlayer(
+        World->SpawnActor<AController>(AFNGEnemyController::StaticClass(), SpawnInfo));
+  }
+
   UFNGPlatformerFunctionLibrary::EvalSetLocation(PlatformData);
   UFNGPlatformerFunctionLibrary::EvalInit();
   UFNGPlatformerFunctionLibrary::EvalStartGame();
@@ -52,21 +62,15 @@ void AFNGGameModeBase::StartPlay()
 void AFNGGameModeBase::Tick(float DeltaSeconds)
 {
   Super::Tick(DeltaSeconds);
-  const auto GS = GetGameState<AFNGGameState>();
+  auto GS = GetGameState<AFNGGameState>();
   if (GS)
   {
+    UFNGPlatformerFunctionLibrary::EvalUpdate(GS->Input.bWantsMoveLeft,
+                                              GS->Input.bWantsMoveRight,
+                                              GS->Input.bWantsJump,
+                                              GS->Input.bWantsCrouch,
+                                              GS->Input.bWantsAttack,
+                                              GS->Input.bWantsBlock);
     GS->PlatformerGameState = UFNGPlatformerFunctionLibrary::EvalGetState(Buffer);
-    const auto Pos_X = GS->PlatformerGameState.Player.Parameters.Position.X;
-    const auto Pos_Y = GS->PlatformerGameState.Player.Parameters.Position.Y;
-
-    const auto Vel_X = GS->PlatformerGameState.Player.Parameters.Velocity.X;
-    const auto Vel_Y = GS->PlatformerGameState.Player.Parameters.Velocity.Y;
-    /*UE_LOG(LogTemp,
-           Warning,
-           TEXT("Position [%5.0f,%5.0f], Velocity [%5.0f,%5.0f]"),
-           Pos_X,
-           Pos_Y,
-           Vel_X,
-           Vel_Y);*/
   }
 }

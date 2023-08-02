@@ -56,7 +56,7 @@ struct FPlatformerPlayer
   GENERATED_USTRUCT_BODY()
 
   FPlatformerGameObject Parameters;
-  
+
   EPlatformerPlayerState State;
   int32 StateFrame;
 
@@ -69,6 +69,19 @@ struct FPlatformerGameState
   GENERATED_USTRUCT_BODY()
 
   FPlatformerPlayer Player, Enemy;
+};
+
+USTRUCT(BlueprintType)
+struct FInputData
+{
+  GENERATED_USTRUCT_BODY()
+
+  bool bWantsMoveLeft = false;
+  bool bWantsMoveRight = false;
+  bool bWantsJump = false;
+  bool bWantsCrouch = false;
+  bool bWantsAttack = false;
+  bool bWantsBlock = false;
 };
 
 USTRUCT(BlueprintType)

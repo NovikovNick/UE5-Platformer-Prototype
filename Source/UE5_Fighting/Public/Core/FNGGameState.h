@@ -16,6 +16,7 @@ class UE5_FIGHTING_API AFNGGameState : public AGameStateBase
   GENERATED_BODY()
 
 public:
+  FInputData Input;
   FPlatformerGameState PlatformerGameState;
 
   uint8_t game_state_buf[512];

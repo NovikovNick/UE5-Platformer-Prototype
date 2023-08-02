@@ -4,11 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "Core/FNGBaseController.h"
 #include "FNGPlayerController.generated.h"
 
+class AFNGGameState;
+struct FPlatformerPlayer;
 
 UCLASS()
-class UE5_FIGHTING_API AFNGPlayerController : public APlayerController
+class UE5_FIGHTING_API AFNGPlayerController : public AFNGBaseController
 {
   GENERATED_BODY()
 public:
@@ -17,17 +20,7 @@ public:
 protected:
   virtual void SetupInputComponent() override;
   
-  UPROPERTY(EditAnywhere)
-  TSubclassOf<AActor> GeneratedClass;
-
 private:
-  bool bWantsMoveLeft = false;
-  bool bWantsMoveRight = false;
-  bool bWantsJump = false;
-  bool bWantsCrouch = false;
-  bool bWantsAttack = false;
-  bool bWantsBlock = false;
-
   void Move(float Amount);
   void Attack(bool Enable);
   void Block(bool Enable);

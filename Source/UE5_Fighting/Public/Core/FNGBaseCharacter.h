@@ -39,9 +39,10 @@ protected:
   UAnimMontage* HighAttackAnimMontage;
 
 public:
-
   UFUNCTION(BlueprintCallable)
   float GetVelocityX() const { return VelocityX; }
+
+  void SetVelocityX(float Value) { VelocityX = Value; }
 
   // Called every frame
   virtual void Tick(float DeltaTime) override;
@@ -50,11 +51,15 @@ public:
   virtual void SetupPlayerInputComponent(
       class UInputComponent* PlayerInputComponent) override;
 
-private:
-  float VelocityX = 0.0f;
+  
+  void MoveTo(float X, float Y);
 
   void LowAttack();
   void MidAttack();
   void HighAttack();
+
+private:
+  float VelocityX = 0.0f;
+
   void Play(UAnimMontage* AnimMontage);
 };
