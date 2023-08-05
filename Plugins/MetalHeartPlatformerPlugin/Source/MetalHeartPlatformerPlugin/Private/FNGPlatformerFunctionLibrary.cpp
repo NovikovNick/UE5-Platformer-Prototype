@@ -11,9 +11,14 @@ void Fill(const ser::Player& Src, FPlatformerPlayer& Dst);
 uint8_t game_state_buf[512];
 int length = 0;
 
-void UFNGPlatformerFunctionLibrary::EvalInit()
+void UFNGPlatformerFunctionLibrary::EvalInit(FEndpoint& PeerEndpoint)
 {
-  Init({60, Endpoint{}});
+  UE_LOG(LogTemp,
+         Warning,
+         TEXT("Init game with peer: %s:%d"),
+         *PeerEndpoint.host,
+         PeerEndpoint.port);
+  Init({60, Endpoint{TCHAR_TO_ANSI(*PeerEndpoint.host), PeerEndpoint.port}});
 }
 
 void UFNGPlatformerFunctionLibrary::EvalSetLocation(TArray<FPlatformData>& PlatformData)
@@ -32,7 +37,14 @@ void UFNGPlatformerFunctionLibrary::EvalSetLocation(TArray<FPlatformData>& Platf
   SetLocation(location);
 }
 
-void UFNGPlatformerFunctionLibrary::EvalGetPublicEndpoint(int local_port) {}
+FEndpoint UFNGPlatformerFunctionLibrary::EvalGetPublicEndpoint(int LocalPort)
+{
+  auto Endpoint = GetPublicEndpoint(LocalPort);
+  FEndpoint res;
+  res.host = UTF8_TO_TCHAR(Endpoint.remote_host);
+  res.port = Endpoint.remote_port;
+  return res;
+}
 
 void UFNGPlatformerFunctionLibrary::EvalStartGame()
 {
@@ -65,7 +77,7 @@ FPlatformerGameState UFNGPlatformerFunctionLibrary::EvalGetState(
 
   ser::GameState DeserializedGameState;
   DeserializedGameState.ParseFromArray(Buffer.Buffer, Buffer.BufferLength);
-  
+
   FPlatformerGameState Res;
   Fill(DeserializedGameState.players()[0], Res.Player);
   Fill(DeserializedGameState.players()[1], Res.Enemy);
@@ -105,7 +117,7 @@ void Fill(const ser::Player& Src, FPlatformerPlayer& Dst)
 
   Dst.Parameters.Width = Src.obj().width();
   Dst.Parameters.Height = Src.obj().height();
-  
+
   Dst.IsLeftDirection = Src.left_direction();
 
   Dst.State = Convert(Src.state());

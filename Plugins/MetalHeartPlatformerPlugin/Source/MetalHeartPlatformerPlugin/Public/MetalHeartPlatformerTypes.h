@@ -99,3 +99,13 @@ public:
   UPROPERTY(EditAnywhere, Category = "General")
   int32 Height;
 };
+
+USTRUCT(BlueprintType)
+struct FEndpoint
+{
+  GENERATED_USTRUCT_BODY()
+
+  FString host;
+  int32 port;
+};
+

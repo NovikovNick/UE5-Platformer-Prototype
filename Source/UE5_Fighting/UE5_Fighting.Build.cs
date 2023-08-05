@@ -15,10 +15,14 @@ public class UE5_Fighting : ModuleRules
             "InputCore",
             "MetalHeartPlatformerPlugin",
             "Protobuf",
+            "UMG"
         });
 
         PublicIncludePaths.AddRange(new string[] {
-            "UE5_Fighting/Public/Core"
+            "UE5_Fighting/Public/Core",
+            "UE5_Fighting/Public/MainMenu"
         });
+
+        PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
     }
 }

@@ -15,13 +15,13 @@ class METALHEARTPLATFORMERPLUGIN_API UFNGPlatformerFunctionLibrary
 
 public:
   UFUNCTION(BlueprintCallable, Category = "Platformer Library")
-  static void EvalInit();
+  static void EvalInit(FEndpoint& PeerEndpoint);
 
   UFUNCTION(BlueprintCallable, Category = "Platformer Library")
   static void EvalSetLocation(TArray<FPlatformData>& PlatformData);
 
   UFUNCTION(BlueprintCallable, Category = "Platformer Library")
-  static void EvalGetPublicEndpoint(int local_port);
+  static FEndpoint EvalGetPublicEndpoint(int local_port);
 
   UFUNCTION(BlueprintCallable, Category = "Platformer Library")
   static void EvalStartGame();

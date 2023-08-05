@@ -9,15 +9,14 @@ public class MetalHeartPlatformerPluginLibrary : ModuleRules
     {
         Type = ModuleType.External;
 
-        string DllBinaryPath = Path.Combine(ModuleDirectory, "..", "..", "..", "Binaries", "Win64", "frontend_async.dll");
+        string DllBinaryPath = Path.Combine(ModuleDirectory, "..", "..", "..", "Binaries", "Win64", "frontend_ggpo.dll");
 
         if (Target.Platform == UnrealTargetPlatform.Win64)
         {
-
             string IncludeDir = Path.Combine(ModuleDirectory, "include");
             string LibDir = Path.Combine(ModuleDirectory, "windows");
-            string LibPath = Path.Combine(LibDir, "frontend_async.lib");
-            string DllPath = Path.Combine(LibDir, "frontend_async.dll");
+            string LibPath = Path.Combine(LibDir, "frontend_ggpo.lib");
+            string DllPath = Path.Combine(LibDir, "frontend_ggpo.dll");
 
             System.Console.WriteLine("IncludeDir: " + IncludeDir);
             System.Console.WriteLine("LibPath: " + LibPath);

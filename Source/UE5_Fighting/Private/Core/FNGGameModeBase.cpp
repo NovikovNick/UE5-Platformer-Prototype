@@ -5,8 +5,10 @@
 #include "Core/FNGPlayerController.h"
 #include "Core/FNGEnemyController.h"
 #include "Core/FNGGameState.h"
+#include "Core/FNGGameInstance.h"
 #include "FNGPlatformerFunctionLibrary.h"
 #include "MetalHeartPlatformerTypes.h"
+
 
 FPlatformerGameBuffer Buffer;
 
@@ -26,6 +28,9 @@ void AFNGGameModeBase::StartPlay()
 
   if (!GetWorld()) return;
   auto World = GetWorld();
+
+  const auto GameInstance = World->GetGameInstance<UFNGGameInstance>();
+  if (!GameInstance) return;
 
   // Spawn platforms
   for (const auto Platform : PlatformData)
@@ -53,9 +58,9 @@ void AFNGGameModeBase::StartPlay()
     RestartPlayer(
         World->SpawnActor<AController>(AFNGEnemyController::StaticClass(), SpawnInfo));
   }
-
+  auto PeerEndpoint = GameInstance->GetPeerEndpoint();
   UFNGPlatformerFunctionLibrary::EvalSetLocation(PlatformData);
-  UFNGPlatformerFunctionLibrary::EvalInit();
+  UFNGPlatformerFunctionLibrary::EvalInit(PeerEndpoint);
   UFNGPlatformerFunctionLibrary::EvalStartGame();
 }
 

@@ -67,10 +67,15 @@ void AFNGPlayerController::SetupInputComponent()
                                                   false);
 }
 
+void AFNGPlayerController::BeginPlay()
+{
+  SetInputMode(FInputModeGameOnly{});
+  bShowMouseCursor = false;
+}
+
 void AFNGPlayerController::Move(float Amount)
 {
-  auto GS = GetGameState();
-  if (GS)
+  if (auto GS = GetGameState()) 
   {
     GS->Input.bWantsMoveRight = Amount > 0;
     GS->Input.bWantsMoveLeft = Amount < 0;
@@ -79,24 +84,20 @@ void AFNGPlayerController::Move(float Amount)
 
 void AFNGPlayerController::Attack(bool Enable)
 {
-  auto GS = GetGameState();
-  if (GS) GS->Input.bWantsAttack = Enable;
+  if (auto GS = GetGameState()) GS->Input.bWantsAttack = Enable;
 }
 
 void AFNGPlayerController::Block(bool Enable)
 {
-  auto GS = GetGameState();
-  if (GS) GS->Input.bWantsBlock = Enable;
+  if (auto GS = GetGameState()) GS->Input.bWantsBlock = Enable;
 }
 
 void AFNGPlayerController::Jump(bool Enable)
 {
-  auto GS = GetGameState();
-  if (GS) GS->Input.bWantsJump = Enable;
+  if (auto GS = GetGameState()) GS->Input.bWantsJump = Enable;
 }
 
 void AFNGPlayerController::Crouch(bool Enable)
 {
-  auto GS = GetGameState();
-  if (GS) GS->Input.bWantsCrouch = Enable;
+  if (auto GS = GetGameState()) GS->Input.bWantsCrouch = Enable;
 }

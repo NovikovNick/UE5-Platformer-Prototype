@@ -19,7 +19,8 @@ public:
 
 protected:
   virtual void SetupInputComponent() override;
-  
+  virtual void BeginPlay() override;
+
 private:
   void Move(float Amount);
   void Attack(bool Enable);
