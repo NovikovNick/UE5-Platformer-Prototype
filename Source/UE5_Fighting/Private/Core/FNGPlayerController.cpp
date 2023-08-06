@@ -6,11 +6,6 @@
 #include "FNGPlatformerFunctionLibrary.h"
 #include "Animation/AnimMontage.h"
 
-void AFNGPlayerController::Tick(float DeltaSeconds)
-{
-  if (GetGameState()) UpdateCharacterPosition(GetGameState()->PlatformerGameState.Player);
-}
-
 void AFNGPlayerController::SetupInputComponent()
 {
   Super::SetupInputComponent();
@@ -69,13 +64,15 @@ void AFNGPlayerController::SetupInputComponent()
 
 void AFNGPlayerController::BeginPlay()
 {
+  Super::BeginPlay();
   SetInputMode(FInputModeGameOnly{});
   bShowMouseCursor = false;
+  if (auto FNGPlayer = Cast<AFNGBaseCharacter>(GetPawn())) FNGPlayer->SetPlayerIndex(0);
 }
 
 void AFNGPlayerController::Move(float Amount)
 {
-  if (auto GS = GetGameState()) 
+  if (auto GS = GetGameState())
   {
     GS->Input.bWantsMoveRight = Amount > 0;
     GS->Input.bWantsMoveLeft = Amount < 0;

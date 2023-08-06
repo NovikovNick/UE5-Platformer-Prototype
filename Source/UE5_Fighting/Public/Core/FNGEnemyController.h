@@ -3,16 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Core/FNGBaseController.h"
+#include "GameFramework/Controller.h"
 #include "FNGEnemyController.generated.h"
 
-/**
- * 
- */
 UCLASS()
-class UE5_FIGHTING_API AFNGEnemyController : public AFNGBaseController
+class UE5_FIGHTING_API AFNGEnemyController : public AController
 {
-	GENERATED_BODY()
-public:
-  virtual void Tick(float DeltaSeconds) override;
+  GENERATED_BODY()
 };

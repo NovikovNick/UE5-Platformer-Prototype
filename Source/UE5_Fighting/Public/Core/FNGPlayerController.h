@@ -14,11 +14,10 @@ UCLASS()
 class UE5_FIGHTING_API AFNGPlayerController : public AFNGBaseController
 {
   GENERATED_BODY()
-public:
-  virtual void Tick(float DeltaSeconds) override;
 
 protected:
   virtual void SetupInputComponent() override;
+  
   virtual void BeginPlay() override;
 
 private:

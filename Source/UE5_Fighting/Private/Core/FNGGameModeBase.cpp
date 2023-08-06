@@ -9,7 +9,6 @@
 #include "FNGPlatformerFunctionLibrary.h"
 #include "MetalHeartPlatformerTypes.h"
 
-
 FPlatformerGameBuffer Buffer;
 
 AFNGGameModeBase::AFNGGameModeBase()
@@ -52,11 +51,16 @@ void AFNGGameModeBase::StartPlay()
   };
 
   {  // Spawn other players
+    int32 PlayerIndex = 1;
+
     FActorSpawnParameters SpawnInfo;
     SpawnInfo.SpawnCollisionHandlingOverride =
         ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-    RestartPlayer(
-        World->SpawnActor<AController>(AFNGEnemyController::StaticClass(), SpawnInfo));
+    auto SpawnedController =
+        World->SpawnActor<AController>(AFNGEnemyController::StaticClass(), SpawnInfo);
+    RestartPlayer(SpawnedController);
+
+    Cast<AFNGBaseCharacter>(SpawnedController->GetPawn())->SetPlayerIndex(PlayerIndex);
   }
   auto PeerEndpoint = GameInstance->GetPeerEndpoint();
   UFNGPlatformerFunctionLibrary::EvalSetLocation(PlatformData);

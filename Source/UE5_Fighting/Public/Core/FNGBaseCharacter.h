@@ -9,6 +9,7 @@
 class UCameraComponent;
 class USpringArmComponent;
 class UAnimMontage;
+class UFNGPositionComponent;
 
 UCLASS()
 class UE5_FIGHTING_API AFNGBaseCharacter : public ACharacter
@@ -22,6 +23,9 @@ public:
 protected:
   // Called when the game starts or when spawned
   virtual void BeginPlay() override;
+
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+  UFNGPositionComponent* PositionComponent;
 
   UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
   UCameraComponent* CameraComp;
@@ -44,6 +48,10 @@ public:
 
   void SetVelocityX(float Value) { VelocityX = Value; }
 
+  bool Is1stPlayer() const { return PlayerIndex == 0; }
+  
+  void SetPlayerIndex(int32 Value) { PlayerIndex = Value; }
+
   // Called every frame
   virtual void Tick(float DeltaTime) override;
 
@@ -51,7 +59,6 @@ public:
   virtual void SetupPlayerInputComponent(
       class UInputComponent* PlayerInputComponent) override;
 
-  
   void MoveTo(float X, float Y);
 
   void LowAttack();
@@ -60,6 +67,8 @@ public:
 
 private:
   float VelocityX = 0.0f;
+
+  int32 PlayerIndex = 0;
 
   void Play(UAnimMontage* AnimMontage);
 };
