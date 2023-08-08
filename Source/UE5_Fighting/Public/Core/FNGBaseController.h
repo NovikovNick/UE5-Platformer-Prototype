@@ -15,7 +15,5 @@ class UE5_FIGHTING_API AFNGBaseController : public APlayerController
   GENERATED_BODY()
 
 protected:
-  void UpdateCharacterPosition(const FPlatformerPlayer& Character);
-
   AFNGGameState* GetGameState();
 };

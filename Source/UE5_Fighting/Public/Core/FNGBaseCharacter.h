@@ -43,14 +43,32 @@ protected:
   UAnimMontage* HighAttackAnimMontage;
 
 public:
-  UFUNCTION(BlueprintCallable)
-  float GetVelocityX() const { return VelocityX; }
+  void SetVelocity(FVector Value) { Velocity = Value; }
 
-  void SetVelocityX(float Value) { VelocityX = Value; }
+  void SetPlayerIndex(int32 Value) { PlayerIndex = Value; }
+
+  void SetCrouch(bool Value) { Crouch = Value; }
+
+  void SetDamaged(bool Value) { Damaged = Value; }
+
+  void SetBlocked(bool Value) { Blocked = Value; }
 
   bool Is1stPlayer() const { return PlayerIndex == 0; }
-  
-  void SetPlayerIndex(int32 Value) { PlayerIndex = Value; }
+
+  UFUNCTION(BlueprintCallable)
+  bool IsCrouch() const { return Crouch; }
+
+  UFUNCTION(BlueprintCallable)
+  bool IsDamaged() const { return Damaged; }
+
+  UFUNCTION(BlueprintCallable)
+  bool IsBlocked() const { return Blocked; }
+
+  UFUNCTION(BlueprintCallable)
+  float GetVelocityX() const { return Velocity.X; }
+
+  UFUNCTION(BlueprintCallable)
+  float GetVelocityY() const { return Velocity.Y; }
 
   // Called every frame
   virtual void Tick(float DeltaTime) override;
@@ -66,8 +84,10 @@ public:
   void HighAttack();
 
 private:
-  float VelocityX = 0.0f;
-
+  FVector Velocity;
+  bool Crouch = false;
+  bool Damaged = false;
+  bool Blocked = false;
   int32 PlayerIndex = 0;
 
   void Play(UAnimMontage* AnimMontage);

@@ -15,15 +15,20 @@ void UFNGPositionComponent::UpdateCharacterPosition(AFNGBaseCharacter* FNGPlayer
 {
   const auto X = Char.Parameters.Position.X;
   const auto Y = Char.Parameters.Position.Y;
-  const auto Width = Char.Parameters.Width;
-  const auto Height = Char.Parameters.Height;
+  const auto Width = 96;    // Char.Parameters.Width;
+  const auto Height = 160;  // Char.Parameters.Height;
+  FVector Velocity{(Char.IsLeftDirection ? -1 : 1) * Char.Parameters.Velocity.X,
+                   Char.Parameters.Velocity.Y,
+                   0.0};
 
   FNGPlayer->MoveTo(X + Width / 2, Y + Height / 2);
+  FNGPlayer->SetVelocity(Velocity);
 
-  FNGPlayer->SetVelocityX((Char.IsLeftDirection ? -1 : 1) * Char.Parameters.Velocity.X);
+  FNGPlayer->SetActorRotation({0.0f, Char.IsLeftDirection ? 90.0f : -90.0f, 0.0f});
 
-  FNGPlayer->SetActorRotation(
-      FRotator{0.0f, Char.IsLeftDirection ? 90.0f : -90.0f, 0.0f});
+  FNGPlayer->SetCrouch(Char.IsCrouch);
+  FNGPlayer->SetDamaged(Char.OnDamaged);
+  FNGPlayer->SetBlocked(Char.IsBlocked);
 
   switch (Char.State)
   {

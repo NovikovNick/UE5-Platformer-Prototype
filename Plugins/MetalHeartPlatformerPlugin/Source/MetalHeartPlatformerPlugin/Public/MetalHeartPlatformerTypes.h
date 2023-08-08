@@ -60,6 +60,9 @@ struct FPlatformerPlayer
   EPlatformerPlayerState State;
   int32 StateFrame;
   bool IsLeftDirection;
+  bool IsCrouch;
+  bool OnDamaged;
+  bool IsBlocked;
   EPlatformerPlayerAttackPhase AttackPhase;
 };
 

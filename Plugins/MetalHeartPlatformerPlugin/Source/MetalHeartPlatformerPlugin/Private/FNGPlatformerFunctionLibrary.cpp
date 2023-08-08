@@ -119,6 +119,12 @@ void Fill(const ser::Player& Src, FPlatformerPlayer& Dst)
   Dst.Parameters.Height = Src.obj().height();
 
   Dst.IsLeftDirection = Src.left_direction();
+  Dst.IsCrouch = Src.is_crouch();
+  Dst.OnDamaged = Src.on_damage();
+  Dst.IsBlocked = Src.state() == ser::PlayerState::BLOCK ||
+                  Src.state() == ser::PlayerState::BLOCK_STUN ||
+                  Src.state() == ser::PlayerState::SQUAT_BLOCK ||
+                  Src.state() == ser::PlayerState::SQUAT_BLOCK_STUN;
 
   Dst.State = Convert(Src.state());
   Dst.StateFrame = Src.state_frame();
