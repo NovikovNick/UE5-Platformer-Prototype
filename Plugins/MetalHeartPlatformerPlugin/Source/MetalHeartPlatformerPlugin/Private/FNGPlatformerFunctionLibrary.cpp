@@ -125,7 +125,10 @@ void Fill(const ser::Player& Src, FPlatformerPlayer& Dst)
                   Src.state() == ser::PlayerState::BLOCK_STUN ||
                   Src.state() == ser::PlayerState::SQUAT_BLOCK ||
                   Src.state() == ser::PlayerState::SQUAT_BLOCK_STUN;
+  Dst.IsDead = Src.current_health() <= 0;
 
+  Dst.HealthPercent = static_cast<float>(Src.current_health()) / Src.max_health();
+  
   Dst.State = Convert(Src.state());
   Dst.StateFrame = Src.state_frame();
 }

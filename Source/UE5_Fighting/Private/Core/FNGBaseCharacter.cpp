@@ -4,8 +4,10 @@
 #include "Core/FNGGameState.h"
 #include "Camera/CameraComponent.h"
 #include "Components/FNGPositionComponent.h"
+#include "Components/WidgetComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "UI/FNGHealthbarWidget.h"
 
 AFNGBaseCharacter::AFNGBaseCharacter()
 {
@@ -20,29 +22,49 @@ AFNGBaseCharacter::AFNGBaseCharacter()
   CameraComp->SetupAttachment(SpringArmComp);
 
   GetCharacterMovement()->GravityScale = 0.0f;
+  GetMesh()->SetEnableGravity(false);
 
   PositionComponent =
       CreateAbstractDefaultSubobject<UFNGPositionComponent>("PositionComponent");
+
+  HealthWidgetComp = CreateDefaultSubobject<UWidgetComponent>("HealthWidgetComp");
+  HealthWidgetComp->SetupAttachment(GetRootComponent());
+  HealthWidgetComp->SetWidgetSpace(EWidgetSpace::Screen);
+  HealthWidgetComp->SetDrawAtDesiredSize(true);
 }
 
 // Called when the game starts or when spawned
 void AFNGBaseCharacter::BeginPlay()
 {
   Super::BeginPlay();
+  check(HealthWidgetComp);
 }
 
 // Called every frame
 void AFNGBaseCharacter::Tick(float DeltaTime)
 {
   Super::Tick(DeltaTime);
+  if (Dead) return;
+
   auto GS = GetWorld()  //
                 ? Cast<AFNGGameState>(GetWorld()->GetGameState())
                 : nullptr;
   if (GS)
   {
-    PositionComponent->UpdateCharacterPosition(
-        this,
-        Is1stPlayer() ? GS->PlatformerGameState.Player : GS->PlatformerGameState.Enemy);
+    auto& Char = Is1stPlayer()  //
+                     ? GS->PlatformerGameState.Player
+                     : GS->PlatformerGameState.Enemy;
+
+    PositionComponent->UpdateCharacterPosition(this, Char);
+
+    auto Widget = Cast<UFNGHealthbarWidget>(HealthWidgetComp->GetUserWidgetObject());
+    Widget->SetHealthPercent(Char.HealthPercent);
+
+    if (Char.IsDead)
+    {
+      Dead = true;
+      OnDeath();
+    }
   }
 }
 
@@ -81,4 +103,12 @@ void AFNGBaseCharacter::Play(UAnimMontage* AnimMontage)
   {
     PlayAnimMontage(AnimMontage);
   }
+}
+
+void AFNGBaseCharacter::OnDeath()
+{
+  GetMesh()->SetEnableGravity(true);
+  GetCharacterMovement()->GravityScale = 1.2f;
+  GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+  GetMesh()->SetSimulatePhysics(true);
 }

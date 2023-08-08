@@ -63,6 +63,10 @@ struct FPlatformerPlayer
   bool IsCrouch;
   bool OnDamaged;
   bool IsBlocked;
+  bool IsDead;
+
+  float HealthPercent;
+
   EPlatformerPlayerAttackPhase AttackPhase;
 };
 

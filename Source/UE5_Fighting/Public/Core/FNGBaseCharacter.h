@@ -10,6 +10,7 @@ class UCameraComponent;
 class USpringArmComponent;
 class UAnimMontage;
 class UFNGPositionComponent;
+class UWidgetComponent;
 
 UCLASS()
 class UE5_FIGHTING_API AFNGBaseCharacter : public ACharacter
@@ -23,6 +24,9 @@ public:
 protected:
   // Called when the game starts or when spawned
   virtual void BeginPlay() override;
+  
+  UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+  UWidgetComponent* HealthWidgetComp;
 
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
   UFNGPositionComponent* PositionComponent;
@@ -89,6 +93,8 @@ private:
   bool Damaged = false;
   bool Blocked = false;
   int32 PlayerIndex = 0;
+  bool Dead = false;
 
   void Play(UAnimMontage* AnimMontage);
+  void OnDeath();
 };
