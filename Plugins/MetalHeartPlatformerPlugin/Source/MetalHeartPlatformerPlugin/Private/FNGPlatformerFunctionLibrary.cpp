@@ -51,7 +51,10 @@ void UFNGPlatformerFunctionLibrary::EvalStartGame()
   StartGame();
 }
 
-void UFNGPlatformerFunctionLibrary::EvalStopGame() {}
+void UFNGPlatformerFunctionLibrary::EvalStopGame()
+{
+  StopGame();
+}
 
 void UFNGPlatformerFunctionLibrary::EvalUpdate(const bool bWantsMoveLeft,
                                                const bool bWantsMoveRight,
@@ -128,7 +131,7 @@ void Fill(const ser::Player& Src, FPlatformerPlayer& Dst)
   Dst.IsDead = Src.current_health() <= 0;
 
   Dst.HealthPercent = static_cast<float>(Src.current_health()) / Src.max_health();
-  
+
   Dst.State = Convert(Src.state());
   Dst.StateFrame = Src.state_frame();
 }

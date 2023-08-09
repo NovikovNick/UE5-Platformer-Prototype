@@ -19,6 +19,8 @@ public:
   void SetPeerEndpoint(const FEndpoint& Value) { PeerEndpoint = Value; }
 
   FEndpoint GetPeerEndpoint() const { return PeerEndpoint; }
+  
+  virtual void Shutdown() override;
 
 private:
   FEndpoint PeerEndpoint;
