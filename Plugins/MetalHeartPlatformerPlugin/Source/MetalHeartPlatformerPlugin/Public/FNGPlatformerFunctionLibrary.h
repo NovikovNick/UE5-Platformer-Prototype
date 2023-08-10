@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "MetalHeartPlatformerTypes.h"
 #include "FNGPlatformerFunctionLibrary.generated.h"
 
 UCLASS()
@@ -13,34 +14,38 @@ class METALHEARTPLATFORMERPLUGIN_API UFNGPlatformerFunctionLibrary
   GENERATED_BODY()
 
 public:
+  UFUNCTION(BlueprintCallable, Category = "Platformer Library")
+  static void EvalInit(FEndpoint& PeerEndpoint);
 
   UFUNCTION(BlueprintCallable, Category = "Platformer Library")
-  static void Init();  
+  static void EvalSetLocation(TArray<FPlatformData>& PlatformData);
 
   UFUNCTION(BlueprintCallable, Category = "Platformer Library")
-  static void SetLocation(); 
+  static FEndpoint EvalGetPublicEndpoint(int local_port);
 
   UFUNCTION(BlueprintCallable, Category = "Platformer Library")
-  static void GetPublicEndpoint(int local_port);
+  static void EvalStartGame();
 
   UFUNCTION(BlueprintCallable, Category = "Platformer Library")
-  static void StartGame();
+  static void EvalStopGame();
 
   UFUNCTION(BlueprintCallable, Category = "Platformer Library")
-  static void StopGame();
+  static void EvalUpdate(bool bWantsMoveLeft,
+                         bool bWantsMoveRight,
+                         bool bWantsJump,
+                         bool bWantsCrouch,
+                         bool bWantsAttack,
+                         bool bWantsBlock);
 
   UFUNCTION(BlueprintCallable, Category = "Platformer Library")
-  static void Update();
+  static FPlatformerGameState EvalGetState(FPlatformerGameBuffer& Buffer);
 
   UFUNCTION(BlueprintCallable, Category = "Platformer Library")
-  static void GetState();
+  static int32 EvalGetMicrosecondsInOneTick();
 
   UFUNCTION(BlueprintCallable, Category = "Platformer Library")
-  static int32 GetMicrosecondsInOneTick();
+  static void EvalGetStatus();
 
   UFUNCTION(BlueprintCallable, Category = "Platformer Library")
-  static void GetStatus();
-
-  UFUNCTION(BlueprintCallable, Category = "Platformer Library")
-  static void GetErrorCode();
+  static void EvalGetErrorCode();
 };

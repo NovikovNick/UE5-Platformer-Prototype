@@ -25,12 +25,8 @@ void FMetalHeartPlatformerPluginModule::StartupModule()
   ExampleLibraryHandle =
       !LibraryPath.IsEmpty() ? FPlatformProcess::GetDllHandle(*LibraryPath) : nullptr;
 
-  if (ExampleLibraryHandle)
-  {
-    FMessageDialog::Open(EAppMsgType::Ok,
-                         LOCTEXT("ThirdPartyLibraryError", "DLL loaded"));
-  }
-  else
+  
+  if (!ExampleLibraryHandle)
   {
     FMessageDialog::Open(
         EAppMsgType::Ok,
